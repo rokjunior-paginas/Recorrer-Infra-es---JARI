@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Defesa de Multas de Trânsito - Fundo Duplo</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --color-leve: #16a34a;
+            --color-media: #ca8a04;
+            --color-grave: #ea580c;
+            --color-gravissima: #dc2626;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-image: /* Posição: image_1 na esquerda, image_0 na direita */
+                url('image_1.png'), 
+                url('logo_cmtu_01_menor.png'),
+                url('image_0.png'),
+                url('image_3.png'),
+                url('image_5.png');
+            background-position: 
+                left top, 
+                center -15%,
+                right top,
+                left bottom,
+                right bottom;
+            background-repeat: no-repeat;  /* Não repete as imagens */
+            background-size: 33% 50%; /* Faz com que cada imagem ocupe exatamente 33% da largura e 40% da altura para caberem as 3 imagens*/
+            background-attachment: fixed; /* Mantém o fundo fixo ao rolar */
+            background-color: var(--bg-color); /* Cor de fallback caso as imagens demorem a carregar */
+            color: var(--text-main); /* Layout */
+            padding: 40px 90px;  /*90 px aumenta as margens esquerda e direita*/
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        /* --- AJUSTES DE CONTRASTE PARA LEGIBILIDADE --- */
+        header, 
+        footer.site-footer, 
+        .legend {
+            background-color: rgba(15, 23, 42, 0.75); /* Fundo escuro semitransparente para contraste */
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            max-width: 850px;
+        }
+
+        header h1 {
+            color: #f8fafc;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 800;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.6);
+        }
+
+        header h1 span {
+            color: #38bdf8;
+        }
+
+        header p {
+            color: #e2e8f0;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 40px;
+            border-radius: 30px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        .legend-color.leve { background-color: var(--color-leve); color: var(--color-leve); }
+        .legend-color.media { background-color: var(--color-media); color: var(--color-media); }
+        .legend-color.grave { background-color: var(--color-grave); color: var(--color-grave); }
+        .legend-color.gravissima { background-color: var(--color-gravissima); color: var(--color-gravissima); }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            width: 100%;
+            max-width: 1250px;
+            margin-bottom: 50px;
+        }
+
+        .card-container {
+            perspective: 1200px;
+            height: 210px;
+            cursor: pointer;
+        }
+
+        .card {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transform-style: preserve-3d;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            border-radius: 16px;
+        }
+
+        .card-container.flipped .card {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .card-front {
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .card-front.leve { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); }
+        .card-front.media { background: linear-gradient(135deg, #ca8a04 0%, #a16207 100%); }
+        .card-front.grave { background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%); }
+        .card-front.gravissima { background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); }
+
+        .card-back {
+            background-color: #1e293b;
+            color: #f8fafc;
+            transform: rotateY(180deg);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            justify-content: space-between;
+            align-items: stretch;
+            text-align: left;
+        }
+
+        .artigo-text {
+            font-size: 1.4rem;
+            font-weight: 900;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+        }
+
+        .infracao-desc {
+            font-size: 1rem;
+            line-height: 1.4;
+            opacity: 0.98;
+            font-weight: 700;
+        }
+
+        .back-title {
+            font-size: 0.8rem;
+            font-weight: 900;
+            color: #38bdf8;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+        }
+
+        .back-content {
+            font-size: 0.95rem;
+            color: #e2e8f0;
+            line-height: 1.5;
+            font-weight: 500;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .card-footer-info {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            width: 100%;
+            padding-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-weight: 800;
+        }
+
+        footer.site-footer {
+            text-align: center;
+            padding: 20px;
+            color: #ffffff;
+            font-size: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            width: 100%;
+            margin-top: auto;
+        }
+
+        @media(max-width: 768px) {
+            header h1 { font-size: 2rem; }
+            .container { grid-template-columns: 1fr; }
+            body {
+                background-image: url('image_0.png'), url('image_1.png');
+                background-position: left top, left bottom;
+                background-size: 100% 50%;
+            }
+        }
+    </style>
+</head>
+<body>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+ <header>
+        <h1>Defesa de Multas de <span>Trânsito</span></h1>
+        <p>Clique em um cartão para virar e descobrir o principal argumento de defesa.</p>
+    </header>
+	
+	
+    <div class="legend">
+        <div class="legend-item"><div class="legend-color leve"></div> Leve (3 pts)</div>
+        <div class="legend-item"><div class="legend-color media"></div> Média (4 pts)</div>
+        <div class="legend-item"><div class="legend-color grave"></div> Grave (5 pts)</div>
+        <div class="legend-item"><div class="legend-color gravissima"></div> Gravíssima (7 pts / Suspensão)</div>
+    </div>
+
+	
+    <div class="container" id="cards-container">
+        <!-- Injetado via JavaScript -->
+    </div>
+
+    <footer class="site-footer">
+        Desenvolvido com HTML, CSS e JavaScript • Baseado no CTB
+    </footer>
+
+    <script>
+        const infracoes = [
+            {
+                artigo: "Art. 184, I",
+                titulo: "Trafegar na faixa exclusiva de ônibus (à direita)",
+                argumento: "Horário permitido, sinalização confusa ou inexistente, ou manobra para conversão à direita.",
+                gravidadeClass: "leve",
+                gravidadeText: "Leve (3 pts)"
+            },
+            {
+                artigo: "Art. 250, I, b",
+                titulo: "Farol baixo apagado durante o dia (em túnel ou rodovia)",
+                argumento: "Erro de constatação do agente, via urbana não sinalizada como rodovia, ou ausência de placa indicativa de túnel.",
+                gravidadeClass: "leve",
+                gravidadeText: "Leve (3 pts)"
+            },
+            {
+                artigo: "Art. 169",
+                titulo: "Dirigir sem atenção ou sem os cuidados indispensáveis à segurança",
+                argumento: "Auto de infração genérico, sem descrição específica da conduta (ex: rádio, maquiagem), dificultando a ampla defesa.",
+                gravidadeClass: "leve",
+                gravidadeText: "Leve (3 pts)"
+            },
+            /* --- MÉDIA --- */
+            {
+                artigo: "Art. 218, I",
+                titulo: "Excesso de velocidade até 20% do limite",
+                argumento: "Ausência de sinalização (placa R-19) no local, erro no laudo do radar, ou falta de comprovação de aferição do INMETRO.",
+                gravidadeClass: "media",
+                gravidadeText: "Média (4 pts)"
+            },
+            {
+                artigo: "Art. 183",
+                titulo: "Parar sobre a faixa de pedestres na mudança de sinal",
+                argumento: "Sinal amarelo com tempo insuficiente, parada brusca por motivo de segurança (risco de colisão traseira), ou falta de comprovação visual.",
+                gravidadeClass: "media",
+                gravidadeText: "Média (4 pts)"
+            },
+            {
+                artigo: "Art. 181, XVII",
+                titulo: "Estacionar em desacordo com a sinalização (ex: Zona Azul)",
+                argumento: "Sinalização horizontal apagada, parquímetro quebrado, ou erro no preenchimento do tíquete/app.",
+                gravidadeClass: "media",
+                gravidadeText: "Média (4 pts)"
+            },
+            {
+                artigo: "Art. 250, I, b",
+                titulo: "Farol apagado em rodovia quando obrigatório",
+                argumento: "Erra na constatação ou condições em que a exigência não se aplicava",
+                gravidadeClass: "media",
+                gravidadeText: "Média (4 pts)"
+            },
+            /* --- GRAVE --- */
+            {
+                artigo: "Art. 167",
+                titulo: "Deixar de usar o cinto de segurança (condutor ou passageiro)",
+                argumento: "Agente estava em posição que impossibilitava a visualização correta (película escura, ângulo), ou passageiro era menor/idoso com cinto afrouxado.",
+                gravidadeClass: "grave",
+                gravidadeText: "Grave (5 pts)"
+            },
+            {
+                artigo: "Art. 203, V",
+                titulo: "Ultrapassar pela contramão em linha contínua",
+                argumento: "Inexistência ou má visibilidade da sinalização horizontal (linha apagada), desvio de veículo parado/buraco, ou fim de linha contínua não visível.",
+                gravidadeClass: "grave",
+                gravidadeText: "Grave (5 pts)"
+            },
+            {
+                artigo: "Art. 230, XVIII",
+                titulo: "Conduzir veículo em mau estado de conservação (pneus lisos, etc.)",
+                argumento: "Avaliação subjetiva do agente, falta de medição objetiva do sulco do pneu, ou equipamento em perfeitas condições.",
+                gravidadeClass: "grave",
+                gravidadeText: "Grave (5 pts)"
+            },
+            {
+                artigo: "Art. 206",
+                titulo: "Conversão proibida",
+                argumento: "Sinalização inexistente ou insuficiente.",
+                gravidadeClass: "grave",
+                gravidadeText: "Grave (5 pts)"
+            },
+            {
+                artigo: "Art. 218, II",
+                titulo: "Excesso de velocidade de 20% a 50%",
+                argumento: "Erro na medição, equipamento irregular, inconsistência na velocidade considerada.",
+                gravidadeClass: "grave",
+                gravidadeText: "Grave (5 pts)"
+            },
+            {
+                artigo: "Art. 233",
+                titulo: "Deixar de efetuar o registro de veículo no prazo de 30 dias",
+                argumento: "Atraso motivado por greve ou indisponibilidade operacional do órgão de trânsito.",
+                gravidadeClass: "grave",
+                gravidadeText: "Grave (5 pts)"
+            },
+            {
+                artigo: "Art. 195",
+                titulo: "Desobedecer às ordens da autoridade de trânsito ou de seus agentes",
+                argumento: "Sinalização manual do agente ambígua ou falta de clareza na ordem emitida.",
+                gravidadeClass: "grave",
+                gravidadeText: "Grave (5 pts)"
+            },
+            /* --- GRAVÍSSIMA --- */
+            {
+                artigo: "Art. 208",
+                titulo: "Avançar o sinal vermelho do semáforo",
+                argumento: "Sinal amarelo com tempo irregular, registro fotográfico sem a sequência de tempo correta, ou conversão à direita permitida no local.",
+                gravidadeClass: "gravissima",
+                gravidadeText: "Gravíssima (7 pts)"
+            },
+            {
+                artigo: "Art. 252, V",
+                titulo: "Dirigir segurando ou manuseando telefone celular",
+                argumento: "Objeto confundido pelo agente (ex: maço de cigarro, óculos), ação de 'coçar' a orelha, ou necessidade de atender chamada de emergência.",
+                gravidadeClass: "gravissima",
+                gravidadeText: "Gravíssima (7 pts)"
+            },
+            {
+                artigo: "Art. 165",
+                titulo: "Dirigir sob a influência de álcool (Lei Seca)",
+                argumento: "Recusa ao teste (sem confissão de embriaguez), irregularidades no etilômetro (não aferido, bocal não trocado), ou erro na cadeia de custódia.",
+                gravidadeClass: "gravissima",
+                gravidadeText: "Gravíssima (10x + Suspensão)"
+            },
+            {
+                artigo: "Art. 230, V",
+                titulo: "Conduzir veículo com registro ou licenciamento não expedido",
+                argumento: "Atraso motivado por indisponibilidade do sistema do Detran ou compensação bancária pendente fora do prazo de responsabilidade do condutor.",
+                gravidadeClass: "gravissima",
+                gravidadeText: "Gravíssima (7 pts)"
+            },
+            {
+                artigo: "Art. 162, I / V",
+                titulo: "Conduzir veículo sem habilitação (Art. 162, I) ou CNH vencida há mais de 30 dias (Art. 162, V)",
+                argumento: "Erro de identificação do condutor ou habilitação válida.",
+                gravidadeClass: "gravissima",
+                gravidadeText: "Gravíssima (7 pts)"
+            },
+            {
+                artigo: "Art. 218, III",
+                titulo: "Excesso de velocidade acima de 50%",
+                argumento: "Falhas na medição ou identificação do veículo; equipamento sem comprovação de regularidade.",
+                gravidadeClass: "gravissima",
+                gravidadeText: "Gravíssima (7 pts)"
+            },
+	        {
+                artigo: "Art. 181, XX",
+                titulo: "Estacionar em vaga PCD sem credencial",
+                argumento: "Sinalização inadequada da vaga; erro de identificação do veículo.",
+                gravidadeClass: "gravissima",
+                gravidadeText: "Gravíssima (7 pts)"
+            },
+	       {
+                artigo: "Art. 181, XVII",
+                titulo: "Estacionar em vaga de idoso sem credencial",
+                argumento: "Falta de sinalização adequada ou erro material.",
+                gravidadeClass: "gravissima",
+                gravidadeText: "Gravíssima (7 pts)"
+            },
+	       {
+                artigo: "Art. 214",
+                titulo: "Deixar de dar preferência ao pedestre",
+                argumento: "Ausência de comprovação da presença do pedestre ou da situação descrita.",
+                gravidadeClass: "gravissima",
+                gravidadeText: "Gravíssima (7 pts)"
+            },
+        ];
+
+        const container = document.getElementById('cards-container');
+
+        infracoesforEachSafe = infracoes.forEach(inf => {
+            const cardContainer = document.createElement('div');
+            cardContainer.className = 'card-container';
+            
+            cardContainer.innerHTML = `
+                <div class="card">
+                    <div class="card-face card-front ${inf.gravidadeClass}">
+                        <div class="artigo-text">${inf.artigo}</div>
+                        <div class="infracao-desc">${inf.titulo}</div>
+                    </div>
+                    <div class="card-face card-back">
+                        <div>
+                            <div class="back-title">Argumento de Defesa:</div>
+                            <div class="back-content">${inf.argumento}</div>
+                        </div>
+                        <div class="card-footer-info">
+                            <span>${inf.gravidadeText}</span>
+                            <span>Clique para voltar</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            cardContainer.addEventListener('click', () => {
+                cardContainer.classList.toggle('flipped');
+            });
+
+            container.appendChild(cardContainer);
+        });
+    </script>
+</body>
+</html>
