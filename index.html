@@ -9,7 +9,8 @@
             --bg-color: #0f172a;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --color-leve: #16a34a;
+            --color-neutro: #6C72D9;   /* cor nova. do card neutro*/
+	    --color-leve: #16a34a;
             --color-media: #ca8a04;
             --color-grave: #ea580c;
             --color-gravissima: #dc2626;
@@ -161,7 +162,8 @@
             border: 1px solid rgba(255, 255, 255, 0.25);
         }
 
-        .card-front.leve { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); }
+        .card-front.neutro { background: linear-gradient(135deg, #6C72D9 0%, #15803d 100%); }    /* novo card neutro */
+	.card-front.leve { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); }
         .card-front.media { background: linear-gradient(135deg, #ca8a04 0%, #a16207 100%); }
         .card-front.grave { background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%); }
         .card-front.gravissima { background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); }
@@ -251,12 +253,6 @@
 	<br>
 	<br>
 	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
  <header>
         <h1>Defesa de Multas de <span>Trânsito</span></h1>
         <p>Clique em um cartão para virar e descobrir o principal argumento de defesa.</p>
@@ -281,17 +277,18 @@
 
     <script>
         const infracoes = [
-            {
+            
+	    {
+                artigo: "Art. 281, § 1º, I",
+                titulo: "Em caso de furto, roubo, clone de veículo, estado de necessidade ou erro de digitação",
+                argumento: "O auto de infração de trânsito será arquivado e o seu registro julgado insubsistente se for considerado inconsistente ou irregular.",
+                gravidadeClass: "neutro",    // novo card neutro
+                gravidadeText: "pontuação depende da infração"
+            },
+	    {
                 artigo: "Art. 184, I",
                 titulo: "Trafegar na faixa exclusiva de ônibus (à direita)",
                 argumento: "Horário permitido, sinalização confusa ou inexistente, ou manobra para conversão à direita.",
-                gravidadeClass: "leve",
-                gravidadeText: "Leve (3 pts)"
-            },
-            {
-                artigo: "Art. 250, I, b",
-                titulo: "Farol baixo apagado durante o dia (em túnel ou rodovia)",
-                argumento: "Erro de constatação do agente, via urbana não sinalizada como rodovia, ou ausência de placa indicativa de túnel.",
                 gravidadeClass: "leve",
                 gravidadeText: "Leve (3 pts)"
             },
