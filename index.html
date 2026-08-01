@@ -10,7 +10,7 @@
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --color-neutro: #6C72D9;   /* cor nova. do card neutro*/
-	    --color-leve: #16a34a;
+	        --color-leve: #16a34a;
             --color-media: #ca8a04;
             --color-grave: #ea580c;
             --color-gravissima: #dc2626;
@@ -109,6 +109,7 @@
             box-shadow: 0 0 10px currentColor;
         }
 
+        .legend-color.neutro { background-color: var(--color-leve); color: var(--color-leve); }
         .legend-color.leve { background-color: var(--color-leve); color: var(--color-leve); }
         .legend-color.media { background-color: var(--color-media); color: var(--color-media); }
         .legend-color.grave { background-color: var(--color-grave); color: var(--color-grave); }
@@ -163,7 +164,7 @@
         }
 
         .card-front.neutro { background: linear-gradient(135deg, #6C72D9 0%, #15803d 100%); }    /* novo card neutro */
-	.card-front.leve { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); }
+	    .card-front.leve { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); }
         .card-front.media { background: linear-gradient(135deg, #ca8a04 0%, #a16207 100%); }
         .card-front.grave { background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%); }
         .card-front.gravissima { background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); }
@@ -260,6 +261,7 @@
 	
 	
     <div class="legend">
+        <div class="legend-item"><div class="legend-color neutro"></div> Pontuação depende da infração </div>
         <div class="legend-item"><div class="legend-color leve"></div> Leve (3 pts)</div>
         <div class="legend-item"><div class="legend-color media"></div> Média (4 pts)</div>
         <div class="legend-item"><div class="legend-color grave"></div> Grave (5 pts)</div>
